@@ -1,0 +1,12 @@
+{
+  "name": "interview-insight",
+  "version": "1.0.0",
+  "description": "Interview transcript analysis application",
+  "scripts": {
+    "start": "concurrently \"cd frontend && npm start\" \"cd interview-rag && uvicorn app:app --reload --port 8000\"",
+    "install-all": "npm install && cd frontend && npm install && cd ../interview-rag && pip install -r requirements.txt"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+} 

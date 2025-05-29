@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, Typography, CircularProgress, Alert } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 
 interface TranscriptUploadProps {
   userId: string;
@@ -18,7 +19,7 @@ const TranscriptUpload: React.FC<TranscriptUploadProps> = ({ userId }) => {
       formData.append('file', file);
       formData.append('user_id', userId);
       
-      const response = await axios.post('http://localhost:5000/upload', formData, {
+      const response = await axios.post(`${API_BASE_URL}/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -62,46 +63,46 @@ const TranscriptUpload: React.FC<TranscriptUploadProps> = ({ userId }) => {
         Upload Transcript
       </Typography>
       
-      <input
-        accept=".txt"
-        style={{ display: 'none' }}
-        id="transcript-file"
-        type="file"
-        onChange={handleFileChange}
-      />
-      <label htmlFor="transcript-file">
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <input
+          accept=".txt"
+          style={{ display: 'none' }}
+          id="transcript-file"
+          type="file"
+          onChange={handleFileChange}
+        />
+        <label htmlFor="transcript-file">
+          <Button
+            variant="contained"
+            component="span"
+            disabled={uploadMutation.isPending}
+            sx={{ mr: 2 }}
+          >
+            Select File
+          </Button>
+        </label>
         <Button
           variant="contained"
-          component="span"
-          disabled={uploadMutation.isPending}
-          sx={{ mr: 2 }}
+          color="primary"
+          onClick={handleUpload}
+          disabled={!file || uploadMutation.isPending}
         >
-          Select File
+          {uploadMutation.isPending ? (
+            <>
+              <CircularProgress size={24} sx={{ mr: 1 }} />
+              Uploading...
+            </>
+          ) : (
+            'Upload'
+          )}
         </Button>
-      </label>
+      </Box>
 
       {file && (
         <Typography variant="body2" sx={{ mt: 1 }}>
           Selected file: {file.name}
         </Typography>
       )}
-
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleUpload}
-        disabled={!file || uploadMutation.isPending}
-        sx={{ mt: 2 }}
-      >
-        {uploadMutation.isPending ? (
-          <>
-            <CircularProgress size={24} sx={{ mr: 1 }} />
-            Uploading...
-          </>
-        ) : (
-          'Upload'
-        )}
-      </Button>
 
       {error && (
         <Alert severity="error" sx={{ mt: 2 }}>

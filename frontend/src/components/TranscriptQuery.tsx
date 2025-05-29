@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, Paper, CircularProgress, Alert } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 
 interface TranscriptQueryProps {
   userId: string;
@@ -18,7 +19,7 @@ const TranscriptQuery: React.FC<TranscriptQueryProps> = ({ userId }) => {
 
   const queryMutation = useMutation({
     mutationFn: async (question: string) => {
-      const response = await axios.post<QueryResponse>('http://localhost:5000/query', {
+      const response = await axios.post<QueryResponse>(`${API_BASE_URL}/query`, {
         user_id: userId,
         question,
       });

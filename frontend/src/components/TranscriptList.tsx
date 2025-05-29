@@ -13,6 +13,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 
 interface Transcript {
   id: string;
@@ -30,14 +31,14 @@ const TranscriptList: React.FC<TranscriptListProps> = ({ userId }) => {
   const { data: transcripts, isLoading, error } = useQuery({
     queryKey: ['transcripts', userId],
     queryFn: async () => {
-      const response = await axios.get<Transcript[]>(`http://localhost:5000/list/${userId}`);
+      const response = await axios.get<Transcript[]>(`${API_BASE_URL}/list/${userId}`);
       return response.data;
     },
   });
 
   const deleteMutation = useMutation({
     mutationFn: async (transcriptId: string) => {
-      await axios.delete(`http://localhost:5000/delete/${transcriptId}`);
+      await axios.delete(`${API_BASE_URL}/delete/${transcriptId}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['transcripts', userId] });
