@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+langchain
+langchain-community
+faiss-cpu
+openai
+sqlalchemy
+pydantic
+python-dotenv
